@@ -50,7 +50,7 @@ const SignUp = () => {
                 <input type="text"name='password' placeholder="password" className="input input-bordered" required/>
               </div>
               <div className="form-control mt-6">
-                <input className="btn btn-primary" type="submit" value="Sign up" />
+                <input className="btn btn-warning" type="submit" value="Sign up" />
               </div>
             </form>
             <p className='text-center'>
