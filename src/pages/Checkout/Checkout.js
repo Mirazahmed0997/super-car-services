@@ -31,6 +31,7 @@ const Checkout = () => {
         if(phone.length<11)
         {
             alert('invalid phone number')
+            return;
         }
 
         fetch('http://localhost:5000/orders',{

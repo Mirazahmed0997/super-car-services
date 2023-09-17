@@ -1,10 +1,37 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../../assets/logo.svg'
 import { AuthContext } from '../../../Contexts/AuthProvider/AuthProvider';
+import { GoogleAuthProvider } from 'firebase/auth';
 
 const Header = () => {
-  const {user}=useContext(AuthContext)
+  const {user,logout,GoogleSignIn}=useContext(AuthContext)
+  const googleProvider =new GoogleAuthProvider()
+    const navigate=useNavigate();
+    const location=useLocation();
+    const from=location.state?.from?.pathname || '/'
+
+  const handleGoogleSignIn=()=>
+  {
+    GoogleSignIn(googleProvider)
+    .then(result=>
+      {
+          const user=result.user
+          console.log(user)
+          navigate(from,{replace:true})
+
+      })
+  
+      .catch(error=>console.error(error))
+  }
+
+  const handleLogOut=()=>
+  {
+    logout()
+    .then()
+    .catch();
+  }
+
     const menuItems=<>
         <li className='font-semibold '>
             <Link to='/'>Home</Link>
@@ -13,6 +40,7 @@ const Header = () => {
           user?.email ?
           <>
             <li className='font-semibold '><Link to='/orders'>Orders</Link></li>
+            <li className='font-semibold '><Link onClick={handleLogOut} className="font-semibold">Logout</Link></li>
           </>:
           <li className='font-semibold '><Link to='/login'>Login</Link></li>
         }
@@ -37,10 +65,21 @@ const Header = () => {
     </ul>
   </div>
   <div className="navbar-end">
-  <button className="btn btn-outline btn-warning">Appointment</button>
+
+
+  {
+          user?.uid ?
+          <>
+              <p className='mx-2 font-semibold text-orange-600'>{user?.displayName}</p>
+              <img className='ms-2' style={{height:'30px', borderRadius:'40px'}} src={user.photoURL}></img>
+          </>:
+          <button onClick={handleGoogleSignIn} className="btn btn-outline btn-warning">Sign in with Google</button>
+          
+        }
+
   </div>
-</div>
-        </div>
+     </div>
+     </div>
     );
 };
 

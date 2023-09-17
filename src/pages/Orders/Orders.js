@@ -4,7 +4,6 @@ import Order from '../Order/Order';
 
 const Orders = () => {
     const {user}=useContext(AuthContext)
-    console.log(user.email)
     const [orders,setOrders]=useState([])
     // console.log(user)
 
@@ -29,12 +28,35 @@ const Orders = () => {
             console.log(data)
             if(data.deletedCount ===1)
             {
-              alert('Successfully deleted')
               const remaining= orders.filter(odr=>odr._id!==id)
               setOrders(remaining)
+              alert('Successfully deleted')
+
             }
           })
         }
+    }
+
+    const handleStatusUpdate=id=>
+    {
+       fetch(`http://localhost:5000/orders/${id}`,{
+        method:'PATCH',
+        headers:{
+          'content-type':'application/json'
+        },
+        body:JSON.stringify({status:'Approved'})
+       })
+       .then(res=>res.json())
+       .then(data=>{
+        if(data.modifiedCount>0)
+        {
+          const remaining=orders.filter(odr=>odr._id!==id)
+          const updatind=orders.find(odr=>odr._id==id);
+          updatind.status='Approved'
+          const newOrders=[updatind,...remaining]
+          setOrders(newOrders)
+        }
+        console.log(data)})
     }
     return (
         <div>
@@ -44,9 +66,7 @@ const Orders = () => {
     <thead>
       <tr>
         <th>
-          <label>
-            <input type="checkbox" className="checkbox" />
-          </label>
+         
         </th>
         <th>Name</th>
         <th>Service</th>
@@ -56,7 +76,11 @@ const Orders = () => {
     </thead>
     <tbody>
             {
-              orders.map(order=><Order key={order._id} handleDeleteBtn={handleDeleteBtn} order={order}>
+              orders.map(order=><Order
+              key={order._id} 
+              handleDeleteBtn={handleDeleteBtn} 
+              order={order}
+              handleStatusUpdate={handleStatusUpdate}>
 
               </Order>)
             }

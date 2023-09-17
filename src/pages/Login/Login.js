@@ -1,10 +1,16 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import img1 from '../../assets/images/login/login.svg'
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../Contexts/AuthProvider/AuthProvider';
 
 const Login = () => {
-  const {login}=useContext(AuthContext)
+  const {login,setLoading}=useContext(AuthContext)
+  const [error,setError]=useState([])
+  const [success,setSuccess]=useState(false)
+  const navigate=useNavigate();
+  const location=useLocation();
+  const from=location.state?.from?.pathname || '/'
+  
     const handleLogin=event=>
     {
         event.preventDefault();
@@ -17,11 +23,25 @@ const Login = () => {
         login(email,password)
         .then(result=>
           {
-            const user=result.user;
+            const user= result.user
+            setSuccess(true)
             console.log(user)
+            form.reset();
+            if(user.emailVerified){
+              navigate(from,{replace:true})
+            }
+            else{
+              alert('Email is not verified')
+            }
           })
-          .then(error=>console.log(error));
-          form.reset()
+          .catch(error=>
+            {
+              setError(error.message)
+            })
+          .finally(()=>
+          {
+            setLoading(false)
+          }) 
     }
     return (
         <div className="hero w-full my-20 ">
@@ -54,6 +74,12 @@ const Login = () => {
             <p className='text-center'>
                 Don't have an account? <Link className='text-orange-600 font-bold' to='/signup'>Sign up</Link>
             </p>
+            <div className=' text-center'>
+            {
+              success?
+              <small className='text-primary ms-2 text-red-600'></small>:<small className=' ms-3 text-red-600'>{error}</small>
+          } 
+            </div>
           </div>
         </div>
       </div>
