@@ -7,13 +7,13 @@ const PrivateRoutes = ({children}) => {
     const location=useLocation()
     if(loading)
     {
-        return<h1 className='text-5xl'>loading....</h1>
+        return <h1 className='text-5xl'>loading....</h1>
     }
     if(user)
     {
         return children;
     }
-    return <Navigate state={{from:location}} replace></Navigate>
+    return <Navigate to={'/login'} state={{from:location}} replace></Navigate>
 };
 
 export default PrivateRoutes;

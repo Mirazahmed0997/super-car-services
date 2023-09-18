@@ -71,7 +71,12 @@ const Header = () => {
           user?.uid ?
           <>
               <p className='mx-2 font-semibold text-orange-600'>{user?.displayName}</p>
-              <img className='ms-2' style={{height:'30px', borderRadius:'40px'}} src={user.photoURL}></img>
+              <div className="avatar">
+                <div className="w-12 rounded-full">
+                  <img src={user.photoURL} />
+                </div>
+              </div>
+
           </>:
           <button onClick={handleGoogleSignIn} className="btn btn-outline btn-warning">Sign in with Google</button>
           

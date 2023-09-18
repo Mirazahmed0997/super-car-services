@@ -27,7 +27,6 @@ const Order = ({order,handleDeleteBtn,handleStatusUpdate}) => {
             <div className="mask mask-squircle w-12 h-12">
               {
                 orderService?.img && <img src={orderService.img} alt="Avatar Tailwind CSS Component" />
-
               }
             </div>
           </div>
