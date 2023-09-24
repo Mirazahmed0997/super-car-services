@@ -3,9 +3,9 @@ import { AuthContext } from '../../Contexts/AuthProvider/AuthProvider';
 import Order from '../Order/Order';
 
 const Orders = () => {
-    const {user}=useContext(AuthContext)
+    const {user,logout}=useContext(AuthContext)
     const [orders,setOrders]=useState([])
-    // console.log(user)
+    console.log(user)
 
     useEffect(()=>
     {
@@ -14,8 +14,17 @@ const Orders = () => {
             authorization:`Bearer ${localStorage.getItem('token')}`
           }
         })
-        .then(res=>res.json())
-        .then(data=>setOrders(data))
+        .then(res=>{
+          if(res.status=== 401 || res.status===403)
+          {
+            logout()
+          }
+         return res.json()
+        })
+        .then(data=>{
+          // console.log(data)
+          setOrders(data)
+        })
 
     },[user?.email])
 
@@ -60,11 +69,11 @@ const Orders = () => {
           const newOrders=[updatind,...remaining]
           setOrders(newOrders)
         }
-        console.log(data)})
+      })
     }
     return (
         <div>
-            <h2>{orders.length} </h2>
+
             <div className="overflow-x-auto">
   <table className="table">
     <thead>
