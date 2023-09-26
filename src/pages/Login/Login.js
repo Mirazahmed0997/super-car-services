@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import img1 from '../../assets/images/login/login.svg'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../Contexts/AuthProvider/AuthProvider';
+import { setAuthToken } from '../../JWT/Auth.Token';
 
 const Login = () => {
   const {login,setLoading}=useContext(AuthContext)
@@ -25,23 +26,9 @@ const Login = () => {
           {
             const user= result.user
             setSuccess(true)
-            const currentUser={
-              email: user.email
-            }
-            fetch('http://localhost:5000/jwt',{
-              method:'POST',
-              headers:{
-                'content-type':'application/json'
-              },
-              body:JSON.stringify(currentUser)
-            })
-            .then(res=>res.json())
-            .then(data=>{
-              console.log(data)
-              localStorage.setItem('token',data.token)
-            })
+           setAuthToken(user)
                     // setSuccess(true)
-                    form.reset();
+              form.reset();
             if(user.emailVerified)
                 {
                     navigate(from,{replace:true})

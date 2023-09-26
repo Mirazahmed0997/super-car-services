@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../../assets/logo.svg'
 import { AuthContext } from '../../../Contexts/AuthProvider/AuthProvider';
 import { GoogleAuthProvider } from 'firebase/auth';
+import { setAuthToken } from '../../../JWT/Auth.Token';
 
 const Header = () => {
   const {user,logout,GoogleSignIn}=useContext(AuthContext)
@@ -17,7 +18,9 @@ const Header = () => {
     .then(result=>
       {
           const user=result.user
+          setAuthToken(user)
           navigate(from,{replace:true})
+
 
       })
   
