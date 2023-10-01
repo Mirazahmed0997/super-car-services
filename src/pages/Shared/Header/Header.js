@@ -75,7 +75,7 @@ const Header = () => {
               <p className='mx-2 font-semibold text-orange-600'>{user?.displayName}</p>
               <div className="avatar">
                 <div className="w-12 rounded-full">
-                  <img src={user.photoURL} />
+                  <img src={user?.photoURL} />
                 </div>
               </div>
 
